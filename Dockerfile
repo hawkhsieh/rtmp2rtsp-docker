@@ -112,11 +112,13 @@ RUN cd /tmp \
     && rm -rf gst-plugins-base-${GST_VER}.tar.xz \
     && rm -rf gst-plugins-base-${GST_VER}
 
+COPY flv-g711-8000.patch /tmp
 RUN cd /tmp \
     && wget -O gst-plugins-good-${GST_VER}.tar.xz \
         https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${GST_VER}.tar.xz \
     && tar xvf gst-plugins-good-${GST_VER}.tar.xz \
     && cd gst-plugins-good-${GST_VER} \
+    && patch -p0 < ../flv-g711-8000.patch \
     && ./configure \
         --prefix=/usr \
         --disable-static \
@@ -201,9 +203,9 @@ RUN cd /tmp \
         --disable-zlib \
         --disable-bz2 \
     && make && make install \
-    && cd - \
-    && rm -rf gst-plugins-good-${GST_VER}.tar.xz \
-    && rm -rf gst-plugins-good-${GST_VER}
+    && cd - 
+#    && rm -rf gst-plugins-good-${GST_VER}.tar.xz \
+#    && rm -rf gst-plugins-good-${GST_VER}
 
 RUN cd /tmp \
     && wget -O gst-plugins-bad-${GST_VER}.tar.xz \
